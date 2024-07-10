@@ -1,11 +1,21 @@
 class Solution:
     def permute(self, nums: List[int]) -> List[List[int]]:
-        if len(nums) == 1:
-            return [nums]
+        ml = []
 
-        result = []
-        for i,num in enumerate(nums):
-            for r in self.permute(nums[:i] + nums[i+1:]):
-                result.append([num]+r)
-        return result
+        def permutations(i):
+            if i == len(nums):
+                sl = []
+                for n in nums:
+                    sl.append(n)
+
+                ml.append(sl.copy())
+                return
+
+            for j in range(i, len(nums)):
+                nums[i], nums[j] = nums[j], nums[i]
+                permutations(i + 1)
+                nums[i], nums[j] = nums[j], nums[i]
+
+        permutations(0)
+        return ml
         
