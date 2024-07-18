@@ -13,5 +13,4 @@ class Solution:
                         bot = mid
                     else:
                         return True
-        
         return False
