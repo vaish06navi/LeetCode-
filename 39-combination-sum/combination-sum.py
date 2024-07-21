@@ -1,14 +1,19 @@
-class Solution:
-    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
-        def backtrack(start,target,path):
-            if target == 0:
-                result.append(path)
-                return
-            if target < 0:
-                return
-            for i in range(start,len(candidates)):
-                backtrack(i,target-candidates[i],path+[candidates[i]])
-        result = []
-        candidates.sort()
-        backtrack(0,target,[])
-        return result        
+class Solution(object):
+    def combinationSum(self, candidates, target):
+        """
+        :type candidates: List[int]
+        :type target: int
+        :rtype: List[List[int]]
+        """
+        dp = [[] for _ in range(target + 1)]
+        dp[0].append([])
+
+        for i in range(1, target + 1):
+            for candidate in candidates:
+                if candidate <= i:
+                    for prev in dp[i - candidate]:
+                        temp = prev + [candidate]
+                        temp.sort()
+                        if temp not in dp[i]:
+                            dp[i].append(temp)
+        return dp[target]
