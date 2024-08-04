@@ -1,16 +1,17 @@
 class Solution:
     def subsets(self, nums: list[int]) -> list[list[int]]:
-        res: list[list[int]] = []
-        n: int = len(nums)
+        res = []
 
-        def recursion(cur_index, curr) -> None:
-            res.append(curr[:])
+        subset = []
+        def dfs(i):
+            if i >= len(nums):
+                res.append(subset.copy())
+                return
 
-            for index_of_next in range(cur_index, n):
-                curr.append(nums[index_of_next])
-                recursion(index_of_next + 1, curr)
-                curr.pop()
+            subset.append(nums[i])
+            dfs(i+1)
 
-        recursion(0, [])
-
+            subset.pop()
+            dfs(i+1)
+        dfs(0)
         return res
