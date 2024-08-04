@@ -1,17 +1,16 @@
 class Solution:
     def partition(self, s: str) -> List[List[str]]:
-        result = []
+        res = []
 
-        def palindrome(s: str) -> bool:
-            return s == s[::-1]
-        
-        def dfs(s: str, j: int, path: List[str], result: List[List[str]]) -> None:
-            if j == len(s):
-                result.append(path)
-                return
-            for i in range(j, len(s)):
-                if palindrome(s[j: i + 1]):
-                    dfs(s, i + 1, path + [s[j: i + 1]], result)
+        def backtrack(i,curr):
+            if i==len(s):
+                res.append(curr[:])
             
-        dfs(s, 0, [], result)
-        return result
+            for j in range(i,len(s)):
+                if s[i:j+1]==s[i:j+1][::-1]:
+                    curr.append(s[i:j+1])
+                    backtrack(j+1,curr)
+                    curr.pop()
+
+        backtrack(0,[])
+        return res
