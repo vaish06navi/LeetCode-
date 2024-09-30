@@ -1,48 +1,27 @@
-from collections import deque
-
 class Solution:
     def solve(self, board: List[List[str]]) -> None:
-        """
-        Do not return anything, modify board in-place instead.
-        """
-        
-        o = "O"
-        
-        n = len(board) 
-        m = len(board[0])
+        ROWS, COLS = len(board), len(board[0])
 
-        Q = deque()
-        
-        for i in range(n):
-            if board[i][0] == o:
-                Q.append((i,0))
-            if board[i][m-1] == o:
-                Q.append((i, m-1))
-                
-        for j in range(m):
-            if board[0][j] == o:
-                Q.append((0,j))
-            if board[n-1][j] == o:
-                Q.append((n-1, j))
-                
-        def inBounds(i,j):
-            return (0 <= i < n) and (0 <= j < m)
-                
-        while Q:
-            i,j = Q.popleft()
-            board[i][j] = "#"
-            
-            for ii, jj in [(i+1, j), (i-1, j), (i, j+1), (i, j-1)]:
-                if not inBounds(ii, jj):
-                    continue
-                if board[ii][jj] != o:
-                    continue
-                Q.append((ii,jj))
-                board[ii][jj] = '#'
-            
-        for i in range(n):
-            for j in range(m):
-                if board[i][j] == o:
-                    board[i][j] = 'X'
-                elif board[i][j] == '#':
-                    board[i][j] = o
+        def capture(r, c):
+            if r < 0 or c < 0 or r == ROWS or c == COLS or board[r][c] != "O":
+                return
+            board[r][c] = "T"
+            capture(r + 1, c)
+            capture(r - 1, c)
+            capture(r, c + 1)
+            capture(r, c - 1)
+
+        for r in range(ROWS):
+            for c in range(COLS):
+                if board[r][c] == "O" and (r in [0, ROWS - 1] or c in [0, COLS - 1]):
+                    capture(r, c)
+
+        for r in range(ROWS):
+            for c in range(COLS):
+                if board[r][c] == "O":
+                    board[r][c] = "X"
+
+        for r in range(ROWS):
+            for c in range(COLS):
+                if board[r][c] == "T":
+                    board[r][c] = "O"
